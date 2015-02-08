@@ -1,0 +1,78 @@
+﻿@model KickballManager.Models.Team
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Team</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TeamName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TeamName)
+        </dd>
+
+    </dl>
+</div>
+<div id="Players">
+    
+    <h5>Players on the team</h5>
+    <p>
+        @Html.ActionLink("Create or Assign Players", "Assign Players", new { id = Model.TeamID })
+    </p>
+    <dl class="dl-horizontal">
+        @if (Model.Players != null)
+        {
+            foreach (var p in Model.Players)
+            {
+
+                <dt>
+                    @Html.DisplayNameFor(x => p.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(x => p.Name)
+                </dd>
+            }
+        }
+    </dl>
+</div>
+
+<div id="Lineups">
+    <h5>Lineups</h5>
+    @Html.ActionLink("Create New", "../Lineups/Create", new { id = Model.TeamID })
+
+    <dl class="dl-horizontal">
+        @if (Model.Lineups != null)
+        {
+           foreach (var p in Model.Lineups)
+            {
+
+                <dt>
+                    @Html.DisplayNameFor(x => p.Description)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(x => p.Description)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(x => p.Date)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(x => p.Date)
+                </dd>
+            }
+        }
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TeamID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

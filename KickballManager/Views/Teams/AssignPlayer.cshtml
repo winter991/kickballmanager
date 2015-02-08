@@ -1,0 +1,37 @@
+﻿@model KickballManager.ViewModels.AvailablePlayers
+@{
+    ViewBag.Title = "Assign Players";
+}
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+           Name
+        </th>
+ 
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Players)
+    {
+        <tr>
+            <th>
+                @Html.DisplayFor(model => item.Name)
+            </th>
+
+            <td>
+            </td>
+        </tr>
+    }
+
+</table>

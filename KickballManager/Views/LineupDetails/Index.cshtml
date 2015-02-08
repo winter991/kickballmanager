@@ -1,0 +1,45 @@
+﻿@model IEnumerable<KickballManager.Models.LineupDetails>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Player.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.hasKicked)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.hasFielded)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <th>
+            @Html.DisplayFor(model => item.Player.Name)
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => item.hasKicked)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.hasFielded)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.LineupDetailID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.LineupDetailID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.LineupDetailID })
+        </td>
+    </tr>
+}
+
+</table>
