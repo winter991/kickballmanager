@@ -14,7 +14,7 @@ namespace KickballManager.Controllers
     public class TeamsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
+        private int? teamID;
         // GET: Teams
         public ActionResult Index()
         {
@@ -33,6 +33,7 @@ namespace KickballManager.Controllers
             {
                 return HttpNotFound();
             }
+          
             return View(team);
         }
 
@@ -120,12 +121,38 @@ namespace KickballManager.Controllers
         {
             if (id == null || db.Team.Find(id) == null)
             {
-                return  HttpNotFound();
+                return RedirectToAction("Index");
             }
+            teamID = id;
             AvailablePlayers AvailablePlayerViewModel = new AvailablePlayers();
             AvailablePlayerViewModel.Players = CreatePlayerDropDown(id);
             AvailablePlayerViewModel.TeamID = id.Value;
             return View(AvailablePlayerViewModel);
+        
+        }
+
+        [HttpPost]
+        public ActionResult AssignPlayer(int teamID,int playerID)
+        {
+
+            if(playerID== 0)
+            {
+                return RedirectToAction("Index");
+            }
+            Player player = db.Players.Find(playerID);
+            if (player != null && teamID>0)
+            {
+
+                player.TeamID = teamID;
+                db.Entry(player).State = EntityState.Modified;
+                db.SaveChanges();
+
+            }
+            AvailablePlayers AvailablePlayerViewModel = new AvailablePlayers();
+            AvailablePlayerViewModel.Players = CreatePlayerDropDown(teamID);
+            AvailablePlayerViewModel.TeamID = teamID;
+            return RedirectToAction("AssignPlayer/" + teamID);
+           
         }
         public List<Player>  CreatePlayerDropDown(int? id)
         {

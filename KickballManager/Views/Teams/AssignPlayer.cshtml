@@ -12,26 +12,38 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-           Name
-        </th>
- 
+<th>
+    <table class="table">
 
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model.Players)
-    {
         <tr>
             <th>
-                @Html.DisplayFor(model => item.Name)
+                Name
             </th>
+            <th>
+                Team Name
+            </th>
+            <th>
+                Add To Team
+            </th>
+            </tr>
+            @foreach (var item in Model.Players)
+            {
+                <form method="post">
+                <tr>
+                    @Html.Hidden("teamID", Model.TeamID)
+                    @Html.Hidden("PlayerID", item.ID)
+                    <td>
+                        @Html.DisplayFor(model => item.Name)
+                    </td>
 
-            <td>
-            </td>
-        </tr>
-    }
 
-</table>
+                    <td>
+                        @Html.DisplayFor(model => item.TeamID)
+                    <td>
+                        <input type="submit" />
+                    </td>
+
+                </tr>
+                </form>
+            }
+        </table>
