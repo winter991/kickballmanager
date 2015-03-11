@@ -38,6 +38,7 @@ namespace KickballManager.Controllers
         // GET: Players/Create
         public ActionResult Create()
         {
+            CreateAvailbileTeamDropDown();
             return View();
         }
         // GET: Players/Create to a specific team
@@ -45,26 +46,11 @@ namespace KickballManager.Controllers
         {
             Player p=new Player();
             p.TeamID = id;
+            CreateAvailbileTeamDropDown();
             return View(p);
         }
-        // Adds a player to a team. We can either create a new
-        public ActionResult AddPlayer(int? id)
-        {
-            if (id == null || db.Team.Find(id) == null)
-            {
-                return Create( id);// IF we don't have a valid ID just go to the player creation page
-            }
-            var PlayerQuery = from d in db.Players
-                              where !d.TeamID.HasValue || d.TeamID == id
-                             orderby d.Name
-                             select d;
-            // Not sure of a better way to do this be we need to be able to associate the player to a team
-            foreach (Player p in PlayerQuery.ToList<Player>())
-            {
-                p.TeamID = id;
-            }
-            return View(PlayerQuery.ToList<Player>());
-        }
+
+
 
         // POST: Players/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -79,7 +65,7 @@ namespace KickballManager.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
+            
             return View(player);
         }
 
@@ -95,6 +81,7 @@ namespace KickballManager.Controllers
             {
                 return HttpNotFound();
             }
+            CreateAvailbileTeamDropDown();
             return View(player);
         }
 
@@ -115,34 +102,6 @@ namespace KickballManager.Controllers
         }
 
         // POST: Players/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult AddPlayer([Bind(Include = "ID,Name,Gender,TeamID")] Player player)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(player).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(player);
-        }
-        // GET: Players/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Player player = db.Players.Find(id);
-            if (player == null)
-            {
-                return HttpNotFound();
-            }
-            return View(player);
-        }
 
         // POST: Players/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -162,6 +121,15 @@ namespace KickballManager.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+
+        private void CreateAvailbileTeamDropDown(Object TeamName = null)
+        {
+            var TeamQuery = from d in db.Team
+                              orderby d.TeamName
+                              select d;
+            ViewBag.PlayreID = new SelectList(TeamQuery, "ID", "TeamName");
         }
     }
 }
