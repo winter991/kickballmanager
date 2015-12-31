@@ -15,9 +15,14 @@ namespace KickballManager.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Lineups
-        public ActionResult Index()
+       
+        public ActionResult Index(int? teamid)
         {
-            return View(db.Lineup.ToList());
+            if(!teamid.HasValue)
+            {
+                return View((db.Lineup.ToList()));
+            }
+            return View((db.Lineup.Where(l=>l.TeamID==teamid)).ToList());
         }
 
         // GET: Lineups/Details/5
@@ -36,9 +41,15 @@ namespace KickballManager.Controllers
         }
 
         // GET: Lineups/Create
-        public ActionResult Create()
+        public ActionResult Create(int? teamid)
         {
-            return View();
+            if(!teamid.HasValue)
+            {
+                return RedirectToAction("Index");
+            }
+            Lineup newLinup = new Lineup();
+            newLinup.TeamID = teamid;
+            return View(newLinup);
         }
 
         // POST: Lineups/Create
@@ -46,7 +57,7 @@ namespace KickballManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "LineupID,Date,Description")] Lineup lineup)
+        public ActionResult Create([Bind(Include = "LineupID,Date,Description,TeamID")] Lineup lineup)
         {
             if (ModelState.IsValid)
             {

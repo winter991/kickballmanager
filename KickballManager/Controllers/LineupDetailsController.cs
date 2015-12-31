@@ -45,12 +45,16 @@ namespace KickballManager.Controllers
 
         //TODO: Implmenet Team<> player relationship
         // until then this will return all players
-        private void CreateAvailbilePlayerDropDown(Object TeamName = null)
+        private void CreateAvailbilePlayerDropDown(int? teamid = null)
         {
-            var PlayerQuery = from d in db.Players  
-                                   orderby d.Name
-                                   select d;
-            ViewBag.PlayreID = new SelectList(PlayerQuery, "ID", "Name");
+            if (teamid.HasValue)
+            {
+                var PlayerQuery = from d in db.Players
+                                  where d.TeamID == teamid
+                                  orderby d.Name
+                                  select d;
+                ViewBag.PlayerID = new SelectList(PlayerQuery, "ID", "Name");
+            }
         }
 
         // POST: LineupDetails/Create

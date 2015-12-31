@@ -1,4 +1,5 @@
 ﻿@model KickballManager.ViewModels.AvailablePlayers
+    @Html.AntiForgeryToken()
 @{
     ViewBag.Title = "Assign Players";
 }
@@ -6,12 +7,6 @@
 @{
     ViewBag.Title = "Index";
 }
-
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <th>
     <table class="table">
 
@@ -26,24 +21,31 @@
                 Add To Team
             </th>
             </tr>
-            @foreach (var item in Model.Players)
+            @if (Model.Players != null )
             {
-                <form method="post">
-                <tr>
-                    @Html.Hidden("teamID", Model.TeamID)
-                    @Html.Hidden("PlayerID", item.ID)
-                    <td>
-                        @Html.DisplayFor(model => item.Name)
-                    </td>
+               foreach (var item in Model.Players)
+                {
+                    <form method="post">
+                    <tr>
+                        @Html.Hidden("teamID", Model.TeamID)
+                        @Html.Hidden("PlayerID", item.ID)
+                        <td>
+                            @Html.DisplayFor(model => item.Name)
+                        </td>
 
 
-                    <td>
-                        @Html.DisplayFor(model => item.TeamID)
-                    <td>
-                        <input type="submit" />
-                    </td>
+                        <td>
+                            @if(item.TeamID.HasValue && item.TeamID==Model.TeamID)
+                            {
+                                Html.DisplayFor(model => Model.TeamName);
+                            }
+                            
+                        <td>
+                            <input type="submit" value="Assign" >
+                        </td>
 
-                </tr>
-                </form>
+                    </tr>
+                    </form>
+                }
             }
         </table>

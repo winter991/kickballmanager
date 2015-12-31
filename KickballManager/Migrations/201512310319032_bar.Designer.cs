@@ -6,14 +6,14 @@ namespace KickballManager.Migrations
     using System.Data.Entity.Migrations.Infrastructure;
     using System.Resources;
     
-    [GeneratedCode("EntityFramework.Migrations", "6.1.1-30610")]
-    public sealed partial class changes : IMigrationMetadata
+    [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
+    public sealed partial class bar : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(changes));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(bar));
         
         string IMigrationMetadata.Id
         {
-            get { return "201501012036484_changes"; }
+            get { return "201512310319032_bar"; }
         }
         
         string IMigrationMetadata.Source

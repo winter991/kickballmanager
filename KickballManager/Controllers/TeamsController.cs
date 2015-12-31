@@ -29,6 +29,9 @@ namespace KickballManager.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Team team = db.Team.Find(id);
+
+            team.Players = db.Players.Where(p => p.TeamID == id).ToArray<Player>();
+            team.Lineups = db.Lineup.Where(l => l.TeamID == id).ToArray<Lineup>();
             if (team == null)
             {
                 return HttpNotFound();
@@ -119,14 +122,17 @@ namespace KickballManager.Controllers
 
         public ActionResult AssignPlayer(int? id)
         {
+            
             if (id == null || db.Team.Find(id) == null)
             {
                 return RedirectToAction("Index");
             }
+          
             teamID = id;
             AvailablePlayers AvailablePlayerViewModel = new AvailablePlayers();
             AvailablePlayerViewModel.Players = CreatePlayerDropDown(id);
             AvailablePlayerViewModel.TeamID = id.Value;
+            AvailablePlayerViewModel.TeamName = (db.Team.Find(id.Value)).TeamName;
             return View(AvailablePlayerViewModel);
         
         }
@@ -151,6 +157,7 @@ namespace KickballManager.Controllers
             AvailablePlayers AvailablePlayerViewModel = new AvailablePlayers();
             AvailablePlayerViewModel.Players = CreatePlayerDropDown(teamID);
             AvailablePlayerViewModel.TeamID = teamID;
+            AvailablePlayerViewModel.TeamName = (db.Team.Find(teamID)).TeamName;
             return RedirectToAction("AssignPlayer/" + teamID);
            
         }
@@ -161,7 +168,7 @@ namespace KickballManager.Controllers
                 return null;
             }
             var PlayerQuery = from d in db.Players
-                              where !d.TeamID.HasValue || d.TeamID == id
+                              where !d.TeamID.HasValue
                               orderby d.Name
                               select d;
 

@@ -2,7 +2,42 @@
 
 @{
     ViewBag.Title = "Details";
+    ViewBag.TeamID = Model.TeamID;
 }
+ <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#togglePlayers").click(function () {
+       
+            $("#Players").toggle();
+            if ($("#Players").is(":visible") )
+            { $("#ui-button-ToggleText").text("Hide Players") }               
+            else
+            { $("#ui-button-ToggleText").text("Show Players") }           
+
+        });
+  
+        $("#toggleNewPlayer").click(function () {         
+           $("#NewPlayer").toggle();
+
+           if ($("#NewPlayer").is(":visible"))
+            { $("#ui-buttonnewPlayer-ToggleTextid").text("Hide New Player Form") }
+            else
+            { $("#ui-buttonnewPlayer-ToggleTextid").text("Show New Player Form") }
+           
+        });
+     });
+        //$("#toggleFreeAgents").click(function () {
+
+        //    $("#FreeAgents").toggle();
+        //    if ($("#NewPlayer").is(":visible"))
+        //    { $("#ui-buttonnewPlayer-ToggleText").text("Hide New Player Form") }
+        //    else
+        //    { $("#ui-buttonnewPlayer-ToggleText").text("Show New Player Form") }
+
+        //});
+   // });
+</script>
 
 <h2>Details</h2>
 
@@ -20,33 +55,57 @@
 
     </dl>
 </div>
-<div id="Players">
-    
-    <h5>Players on the team</h5>
-    <p>
-        @Html.ActionLink("Create or Assign Players", "AssignPlayer", new { id = Model.TeamID })
-    </p>
-    <dl class="dl-horizontal">
-        @if (Model.Players != null)
-        {
-            foreach (var p in Model.Players)
+
+<div id="Players-Container">
+    <button id="togglePlayers" text="Hide">
+        <span id="ui-button-ToggleText"> Hide Players Section</span>
+    </button>   
+    <div id="Players">
+        <h3>Players on the team</h3>
+        <dl class="dl-horizontal">
+
+            @if (Model.Players != null)
             {
+                foreach (var p in Model.Players)
+                {
+                    <dt>
+                        @Html.DisplayNameFor(x => p.Name)
+                    </dt>
 
-                <dt>
-                    @Html.DisplayNameFor(x => p.Name)
-                </dt>
-
-                <dd>
-                    @Html.DisplayFor(x => p.Name)
-                </dd>
+                    <dd>
+                        @Html.DisplayFor(x => p.Name)
+                    </dd>
+                }
             }
-        }
-    </dl>
+        </dl>
+    </div>
+    <button id="toggleNewPlayer">
+        <spanid id="ui-buttonnewPlayer-ToggleTextid">Hide</spanid>
+    </button>        
+    <div  id="NewPlayer">
+        <h4>Add New Player</h4>
+          
+
+        @{ KickballManager.Models.Player createplayer = new KickballManager.Models.Player();
+            createplayer.ID = Model.TeamID;
+            @Html.Partial("CreatePlayerPartial", createplayer);
+        } 
+        <p>
+            <h3>Free Agents</h3>
+            @Html.ActionLink("Create  Add Free Agents", "AssignPlayer", new { id = Model.TeamID })
+        </p>
+    
+        </div>
+
+            
+
+    
+    
 </div>
 
 <div id="Lineups">
     <h5>Lineups</h5>
-    @Html.ActionLink("Create New", "../Lineups/Create", new { id = Model.TeamID })
+    @Html.ActionLink("Create New", "../Lineups/Create", new { teamID = Model.TeamID })
 
     <dl class="dl-horizontal">
         @if (Model.Lineups != null)

@@ -36,15 +36,16 @@ namespace KickballManager.Controllers
         }
 
         // GET: Players/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+      
         // GET: Players/Create to a specific team
         public ActionResult Create(int? id)
         {
             Player p=new Player();
-            p.TeamID = id;
+            if(id.HasValue)
+            {
+                p.TeamID = id;
+            }
+            
             return View(p);
         }
         // Adds a player to a team. We can either create a new
@@ -153,6 +154,18 @@ namespace KickballManager.Controllers
             db.Players.Remove(player);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        // GET: Players/Delete/5
+        public ActionResult GetUnassignedPlayers()
+        {
+            
+            IEnumerable<Player> unAssignedPlayers = db.Players.Where(p=>p.TeamID == null) ;
+            if (unAssignedPlayers == null)
+            {
+                return HttpNotFound();
+            }
+            return View(unAssignedPlayers);
         }
 
         protected override void Dispose(bool disposing)
