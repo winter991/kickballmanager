@@ -1,2 +1,2 @@
 # kickballmanager
-Let's lern mvc
+Let's learn mvc
